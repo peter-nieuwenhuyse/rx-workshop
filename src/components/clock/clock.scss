@@ -1,3 +1,9 @@
+:host {
+  --swmu-yellow: #fad018;
+  --seconds : 90deg;
+  --minutes : 90deg;
+  --hours : 90deg;
+}
 #clock {
   position: relative;
   display: block;
@@ -221,19 +227,24 @@
         box-shadow: 5px 5px 127px -27px rgba(255, 255, 255, 1)
       }
     }
+    .seconds-pointer {
+      transform: rotate(var(--seconds));
+    }
 
     .minutes-pointer {
       height: 4px;
       margin-top: -2px;
+      transform: rotate(var(--minutes));
       &::before {
         width: 45%;
-        background-color: #fad018;
+        background-color: var(--swmu-yellow);
       }
     }
 
     .hours-pointer {
       height: 6px;
       margin-top: -3px;
+      transform: rotate(var(--hours));
       &::before {
         background-color: #343434;
         width: 35%;

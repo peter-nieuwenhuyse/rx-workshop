@@ -3,6 +3,7 @@ import {sass} from '@stencil/sass';
 
 export const config: Config = {
   namespace: 'rxjs-workshop',
+  globalStyle: 'src/global/variables.css',
   plugins: [
       sass()
   ],
