@@ -1,21 +1,37 @@
 :host {
   --swmu-yellow: #fad018;
+  --swmu-green: #00d198;
+  --swmu-grey: #343434;
+  --shadow-color: rgba(0,0,0,0.75);
   --seconds : 90deg;
   --minutes : 90deg;
   --hours : 90deg;
 }
+
+@mixin clock-shadow {
+  -webkit-box-shadow: 10px 10px 24px -10px var(--shadow-color);
+  -moz-box-shadow: 10px 10px 24px -10px var(--shadow-color);
+  box-shadow: 10px 10px 24px -10px var(--shadow-color);
+}
+
+@mixin small-shadow {
+  -webkit-box-shadow: 5px 5px 24px -10px var(--shadow-color);
+  -moz-box-shadow: 5px 5px 24px -10px var(--shadow-color);
+  box-shadow: 5px 5px 24px -10px var(--shadow-color);
+}
+
+
 #clock {
   position: relative;
   display: block;
   max-width: 320px;
   font-size: 16px;
-  background-color: #fad018;
+  background-color: var(--swmu-yellow);
   padding: 1rem;
   text-align: center;
   border-radius: 5px;
-  -webkit-box-shadow: 10px 10px 24px -10px rgba(0, 0, 0, 0.75);
-  -moz-box-shadow: 10px 10px 24px -10px rgba(0, 0, 0, 0.75);
-  box-shadow: 10px 10px 24px -10px rgba(0, 0, 0, 0.75);
+  @include clock-shadow;
+
 }
 
 .controls {
@@ -33,10 +49,8 @@
     margin: 1rem;
     border-radius: 50px;
     color: #000000;
-    background-color: #00d198;
-    -webkit-box-shadow: 5px 5px 24px -10px rgba(0, 0, 0, 0.75);
-    -moz-box-shadow: 5px 5px 24px -10px rgba(0, 0, 0, 0.75);
-    box-shadow: 5px 5px 24px -10px rgba(0, 0, 0, 0.75);
+    background-color: var(--swmu-green);
+    @include small-shadow;
   }
 }
 
@@ -49,9 +63,7 @@
   background-color: #343434;
   margin-top: 2rem;
   margin-bottom: 1rem;
-  -webkit-box-shadow: 5px 5px 24px -10px rgba(0, 0, 0, 0.75);
-  -moz-box-shadow: 5px 5px 24px -10px rgba(0, 0, 0, 0.75);
-  box-shadow: 5px 5px 24px -10px rgba(0, 0, 0, 0.75);
+  @include small-shadow;
 
   .clock-plate {
     position: absolute;
@@ -70,7 +82,7 @@
       width: 270px;
       display: block;
       height: 1px;
-      background-color: #343434;
+      background-color: var(--swmu-grey);
       position: absolute;
       top: 50%;
       @for $i from 1 through 30 {
@@ -92,7 +104,7 @@
       width: 260px;
       display: block;
       height: 1px;
-      background-color: #343434;
+      background-color: var(--swmu-grey);
       position: absolute;
       top: 50%;
       @for $i from 1 through 12 {
@@ -114,7 +126,7 @@
       width: 250px;
       display: block;
       height: 1px;
-      background-color: #343434;
+      background-color: var(--swmu-grey);
       position: absolute;
       top: 50%;
       @for $i from 1 through 2 {
@@ -152,7 +164,7 @@
     .left {
       width: 65px;
       height: 65px;
-      background-color: #fad018;
+      background-color: var(--swmu-yellow);
       display: inline-block;
       border-bottom-left-radius: 50%;
       border-top-right-radius: 50%;
@@ -162,7 +174,7 @@
     .right {
       width: 100px;
       height: 100px;
-      background-color: #343434;
+      background-color: var(--swmu-grey);
       display: inline-block;
       border-top-left-radius: 50%;
       border-bottom-right-radius: 50%;
@@ -188,9 +200,9 @@
       left: 50%;
       top: 50%;
       transform: translate(-50%, -50%);
-      background-color: #fad018;
+      background-color: var(--swmu-yellow);
       z-index: 20;
-      border: solid 3px #00d198;
+      border: solid 3px var(--swmu-green);
     }
     &::after {
       content: '';
@@ -202,7 +214,7 @@
       left: 50%;
       top: 50%;
       transform: translate(-50%, -50%);
-      background-color: #343434;
+      background-color: var(--swmu-grey);
     }
 
     > div {
@@ -220,11 +232,8 @@
         right: 50%;
         height: 100%;
         display: block;
-        background-color: #00d198;
+        background-color: var(--swmu-green);
         border-radius: 50%;
-        -webkit-box-shadow: 5px 5px 127px -27px rgba(255, 255, 255, 1);
-        -moz-box-shadow: 5px 5px 127px -27px rgba(255, 255, 255, 1);
-        box-shadow: 5px 5px 127px -27px rgba(255, 255, 255, 1)
       }
     }
     .seconds-pointer {
@@ -246,7 +255,7 @@
       margin-top: -3px;
       transform: rotate(var(--hours));
       &::before {
-        background-color: #343434;
+        background-color: var(--swmu-grey);
         width: 35%;
       }
     }
