@@ -1,6 +1,6 @@
 import {Component, Element, Event, EventEmitter, h} from '@stencil/core';
-import {BehaviorSubject, combineLatest, fromEvent, Subject, Subscription, timer} from 'rxjs';
-import {filter, map, shareReplay, startWith, switchMap, takeUntil, withLatestFrom} from 'rxjs/operators';
+import {BehaviorSubject, combineLatest, fromEvent, Subject, timer} from 'rxjs';
+import {filter, map, shareReplay, startWith, switchMap, take, takeUntil, withLatestFrom} from 'rxjs/operators';
 
 @Component({
     tag: 'my-clock',
@@ -27,7 +27,6 @@ export class Clock {
     private stop$;
     private interval$;
     private currentSeconds$;
-    private pauseOrTake$: Subscription;
     private pauseValue$: BehaviorSubject<number> = new BehaviorSubject<number>(0);
     private cancel$: Subject<boolean> = new Subject<boolean>();
     private destroy$: Subject<boolean> = new Subject<boolean>();
@@ -48,9 +47,14 @@ export class Clock {
     }
 
     private createTimers() {
-        this.pauseOrTake$ ? this.pauseOrTake$.unsubscribe() : null;
         this.interval$ = timer(0, 1000);
+        this.listenToStart();
+        this.initializePauseOrTake()
+    }
+
+    private listenToStart() {
         this.currentSeconds$ = this.start$.pipe(
+            take(1),
             switchMap(_ => this.interval$.pipe(
                 withLatestFrom(this.pauseValue$),
                 map(([currentSeconds, pauseValue]) => (currentSeconds + pauseValue)),
@@ -59,11 +63,11 @@ export class Clock {
             shareReplay(1)
         );
         this.currentSeconds$.subscribe(this.calculateRotation.bind(this));
-        this.initializePauseOrTake()
     }
 
     private initializePauseOrTake() {
-        this.pauseOrTake$ = combineLatest([this.take$, this.pause$]).pipe(
+        combineLatest([this.take$, this.pause$]).pipe(
+            takeUntil(this.cancel$),
             filter(([a, b]) => (a !== 0 || b !== 0)),
             withLatestFrom(this.currentSeconds$)
         ).subscribe(this.handleStopOrPauseClick.bind(this));
@@ -79,15 +83,16 @@ export class Clock {
     }
 
     private handlePauseClick(currentTime) {
-        this.pauseOrTake$.unsubscribe();
         this.pauseValue$.next(currentTime);
         this.cancel$.next(true);
+        this.createTimers();
     }
 
     private handleStopClick(val) {
         this.stopClock.emit(val[1]);
         this.pauseValue$.next(0);
         this.cancel$.next(true);
+        this.createTimers();
     }
 
     private calculateRotation(value) {
