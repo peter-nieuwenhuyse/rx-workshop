@@ -10,7 +10,6 @@ import {filter, map, shareReplay, startWith, switchMap, take, takeUntil, withLat
 
 export class Clock {
     @Element() private element: HTMLElement;
-
     @Event() takeTime: EventEmitter<number>;
     @Event() stopClock: EventEmitter<number>;
 
